@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DartsApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(DartsApplication.class, args);
 	}
 }
