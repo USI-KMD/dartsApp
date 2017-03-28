@@ -1,5 +1,7 @@
 package zzjp.springboot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.stereotype.Component;
@@ -9,11 +11,14 @@ import javax.persistence.*;
 /**
  * Created by lukasz on 3/22/17.
  */
+//@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties({"id"})
 @Entity
 public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonInclude()
     private Long id;
 
     @Column
@@ -44,6 +49,10 @@ public class Player {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public int hashCode() {
