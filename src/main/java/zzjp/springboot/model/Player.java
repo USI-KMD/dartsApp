@@ -11,7 +11,7 @@ import javax.persistence.*;
 /**
  * Created by lukasz on 3/22/17.
  */
-//@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonIgnoreProperties({"id"})
 @Entity
 public class Player {
@@ -26,6 +26,9 @@ public class Player {
 
     @Column
     private String surname;
+
+    @Column
+    private int age;
 
     public Player() {
     }
@@ -53,6 +56,18 @@ public class Player {
 
     public Long getId() {
         return id;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int hashCode() {

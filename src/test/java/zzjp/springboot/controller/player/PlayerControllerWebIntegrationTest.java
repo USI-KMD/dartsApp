@@ -1,4 +1,4 @@
-package zzjp.springboot.controller;
+package zzjp.springboot.controller.player;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class PlayersControllerWebIntegrationTest {
+public class PlayerControllerWebIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -31,15 +31,14 @@ public class PlayersControllerWebIntegrationTest {
     @Test
     public void testListAll() throws IOException {
 
-        ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/players/", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/player/", String.class);
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         ObjectMapper mapper = new ObjectMapper();
 
         JsonNode responseJson = mapper.readTree(response.getBody());
 
-        Assertions.assertThat(responseJson.isMissingNode()).isFalse();
-
+        System.out.println();
     }
 
 
