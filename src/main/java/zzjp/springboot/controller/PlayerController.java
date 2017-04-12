@@ -2,6 +2,7 @@ package zzjp.springboot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import zzjp.springboot.aspect.Monitored;
 import zzjp.springboot.configuration.MyBean;
 import zzjp.springboot.model.Player;
 import zzjp.springboot.repository.player.PlayerRepository;
@@ -18,6 +19,7 @@ public class PlayerController {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Monitored
     @RequestMapping(value= "", method = RequestMethod.GET)
     public List<Player> findAll() {
 
@@ -34,7 +36,7 @@ public class PlayerController {
     @RequestMapping(value = "testnum", method = RequestMethod.GET)
     public void testPlayer(@RequestParam(value="someint", required = false) Integer num) {
 
-        System.out.println(num);
+//        System.out.println(num);
     }
 
     @RequestMapping(value = "testnum", method = RequestMethod.DELETE)
