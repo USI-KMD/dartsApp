@@ -1,14 +1,13 @@
 package zzjp.springboot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 import zzjp.springboot.aspect.Monitored;
 import zzjp.springboot.aspect.MonitoringAspect;
-import zzjp.springboot.aspect.TracingAspect;
 import zzjp.springboot.async.MyAsyncComponent;
-import zzjp.springboot.configuration.MyBean;
 import zzjp.springboot.model.Player;
-import zzjp.springboot.repository.player.PlayerRepository;
+import zzjp.springboot.service.PlayerService;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -22,13 +21,16 @@ import java.util.concurrent.Future;
 public class PlayerController {
 
     @Autowired
+    ApplicationContext applicationContext;
+
+    @Autowired
     private MyAsyncComponent asyncComponent;
 
     @Autowired
     private MonitoringAspect monitoringAspect;
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerService playerService;
 
     @Monitored
     @RequestMapping(value= "", method = RequestMethod.GET)
@@ -48,17 +50,17 @@ public class PlayerController {
         System.out.println("s2 = " + s2);
 
 
-
-
         monitoringAspect.setEnabled(true);
 
         System.out.println();
-        return playerRepository.findAll();
+        List<Player> allPlayers = playerService.findAllPlayers();
+
+        return allPlayers;
     }
 
     @RequestMapping(value= "create", method = RequestMethod.POST)
     public Player createPlayer(@RequestBody Player player) {
-        Player savedPlayer = playerRepository.saveAndFlush(player);
+        Player savedPlayer = playerService.save(player);
         return savedPlayer;
     }
 
@@ -71,7 +73,7 @@ public class PlayerController {
     @RequestMapping(value = "testnum", method = RequestMethod.DELETE)
     public void deletePlayer(@RequestParam("name") String name) {
 
-//        playerRepository.delete();
+//        playerService.delete();
     }
 
 }

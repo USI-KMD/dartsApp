@@ -4,12 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import zzjp.springboot.model.Player;
 import zzjp.springboot.repository.player.PlayerRepository;
 
+import java.util.Arrays;
+
 @SpringBootApplication
 @EnableAsync
+@EnableMBeanExport
+@EnableCaching
 public class DartsApplication implements CommandLineRunner{
 
 	@Autowired
@@ -20,6 +30,14 @@ public class DartsApplication implements CommandLineRunner{
 		SpringApplication.run(DartsApplication.class, args);
 	}
 
+//	@Bean
+//	public CacheManager cacheManager() {
+//		// configure and return an implementation of Spring's CacheManager SPI
+//		SimpleCacheManager cacheManager = new SimpleCacheManager();
+//		cacheManager.setCaches
+//				(Arrays.asList(new ConcurrentMapCache("allPlayersCache")));
+//		return cacheManager;
+//	}
 
 	@Override
 	public void run(String... args) throws Exception {

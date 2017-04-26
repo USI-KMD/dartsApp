@@ -1,7 +1,10 @@
 package zzjp.springboot.service;
 
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import zzjp.springboot.cache.CacheConstants;
 import zzjp.springboot.model.Player;
 import zzjp.springboot.repository.player.PlayerRepository;
 
@@ -19,7 +22,9 @@ public class PlayerService {
     PlayerRepository playerRepository;
 
     @Transactional
+    @Cacheable(CacheConstants.PLAYERS_CACHE)
     public List<Player> findAllPlayers() {
+
         return playerRepository.findAll();
     }
 
@@ -35,4 +40,7 @@ public class PlayerService {
         return player;
     }
 
+    public Player save(Player player) {
+        return playerRepository.saveAndFlush(player);
+    }
 }
