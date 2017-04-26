@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 import zzjp.springboot.model.Player;
 import zzjp.springboot.repository.player.PlayerRepository;
 
 @SpringBootApplication
+@EnableAsync
 public class DartsApplication implements CommandLineRunner{
 
 	@Autowired

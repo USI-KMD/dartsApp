@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import zzjp.springboot.model.Player;
@@ -22,10 +23,19 @@ import java.util.stream.Collectors;
 @Component
 public class MonitoringAspect {
 
+
+    @Value("${isMonitoringEnabled:false}")
+    private boolean isEnabled;
+
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Around("zzjp.springboot.aspect.DartappPointcuts.monitored()")
     public Object monitor(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+
+        if (!isEnabled) {
+            return proceedingJoinPoint.proceed();
+        }
+
         logger.debug("monitoring: " + proceedingJoinPoint.getSignature());
 
         StopWatch stopWatch = new StopWatch();
@@ -33,18 +43,11 @@ public class MonitoringAspect {
         Object result = proceedingJoinPoint.proceed();
         stopWatch.stop();
         System.out.println("methid took: " + stopWatch.getTotalTimeMillis());
-//        if (result instanceof List) {
-//            List<Player> players = (List<Player>) result;
-//
-//            List<Player> playersNoAdmin = players.stream()
-//                    .filter(player -> !player.getName().equals("ADMIN"))
-//                    .collect(Collectors.toList());
-//
-//            return playersNoAdmin;
-//        }
 
         return result;
     }
 
-
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 }
