@@ -1,6 +1,7 @@
 package zzjp.springboot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,8 +12,11 @@ import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import zzjp.springboot.model.Player;
+import zzjp.springboot.model.User;
 import zzjp.springboot.repository.player.PlayerRepository;
+import zzjp.springboot.repository.player.UserRepository;
 
 import java.util.Arrays;
 
@@ -24,6 +28,13 @@ public class DartsApplication implements CommandLineRunner{
 
 	@Autowired
 	private PlayerRepository playerRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	@Qualifier("customEncoder")
+	private PasswordEncoder encoder;
 
 	public static void main(String[] args) {
 
@@ -55,6 +66,11 @@ public class DartsApplication implements CommandLineRunner{
 		playerRepository.saveAndFlush(player2);
 
 
+		User user = new User();
+		user.setPassword(encoder.encode("pass1"));
+		user.setUsername("user1");
+
+		userRepository.saveAndFlush(user);
 
 	}
 }
