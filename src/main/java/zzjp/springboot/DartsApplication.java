@@ -14,11 +14,14 @@ import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import zzjp.springboot.model.Player;
+import zzjp.springboot.model.Role;
 import zzjp.springboot.model.User;
 import zzjp.springboot.repository.player.PlayerRepository;
 import zzjp.springboot.repository.player.UserRepository;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootApplication
 @EnableAsync
@@ -66,11 +69,31 @@ public class DartsApplication implements CommandLineRunner{
 		playerRepository.saveAndFlush(player2);
 
 
+		Role userRole = new Role();
+		userRole.setEnabled(true);
+		userRole.setName("USER");
+
+		Role adminRole = new Role();
+		adminRole.setEnabled(true);
+		adminRole.setName("ADMIN");
+
 		User user = new User();
 		user.setPassword(encoder.encode("pass1"));
 		user.setUsername("user1");
+		user.setRoles(Stream.of(userRole)
+				.collect(Collectors.toSet()));
 
 		userRepository.saveAndFlush(user);
+
+		User admin = new User();
+		admin.setPassword(encoder.encode("admin"));
+		admin.setUsername("admin");
+		admin.setRoles(Stream.of(adminRole)
+				.collect(Collectors.toSet()));
+
+		userRepository.saveAndFlush(admin);
+
+
 
 	}
 }

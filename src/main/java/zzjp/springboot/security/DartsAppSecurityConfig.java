@@ -21,7 +21,7 @@ public class DartsAppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/v1/player/").permitAll()
+                .antMatchers("/api/v1/player/", "/api/v1/user/create/").permitAll()
                 .antMatchers("/api/v1/player/create/").hasAnyRole("USER")
                 .anyRequest().authenticated()
                 .and().httpBasic()

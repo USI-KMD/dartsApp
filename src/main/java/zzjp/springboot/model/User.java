@@ -1,13 +1,16 @@
 package zzjp.springboot.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class User implements UserDetails {
@@ -20,6 +23,11 @@ public class User implements UserDetails {
     private String username;
 
     private String password;
+
+    @ManyToMany(cascade = javax.persistence.CascadeType.PERSIST,
+            fetch = FetchType.EAGER)
+    @JsonDeserialize(using = RoleToStringDeserializer.class)
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -57,11 +65,24 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> setAuths = new HashSet<>();
-        setAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return setAuths;
+        if (roles == null) {
+            return Collections.emptySet();
+        }
+        return roles.stream()
+                .filter(role -> role.isEnabled())
+                .map(Role::getName)
+                .map(roleName -> new SimpleGrantedAuthority("ROLE_" + roleName))
+                .collect(Collectors.toList());
     }
 
     public String getPassword() {
